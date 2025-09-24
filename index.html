@@ -15,7 +15,16 @@
 
         <div class="main-content">
             <div class="menu-section">
-                <div id="menu" class="menu-grid"></div>
+                <div id="menu" class="menu-grid">
+                    <div class="menu-item">
+                        <img src="/food-photos/your-image.jpg" alt="Food Name">
+                        <h4>Food Item Name</h4>
+                        <p>Delicious description of the food item.</p>
+                        <span class="price">₹100</span>
+                        <button class="btn btn-secondary" onclick="addToOrder('Food Item Name', 100)">Add to Order</button>
+                    </div>
+                    <!-- Repeat similar blocks for other menu items -->
+                </div>
             </div>
             <div class="order-section">
                 <h3>Your Order</h3>
@@ -43,7 +52,7 @@
             <div class="popup-box">
                 <div class="popup-header">
                     <h3>Order Confirmed!</h3>
-                    <span class="close-btn" onclick="closePopup()">×</span>
+                    <span class="close-btn" onclick="closePopup()"></span>
                 </div>
                 <p>Your order number: <span id="order-number-popup"></span></p>
                 <button class="btn btn-primary" onclick="closePopup()">Close</button>
