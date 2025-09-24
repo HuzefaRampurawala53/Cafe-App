@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huzefa's Cafe POS</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Huzefa's Cafe</h1>
+            <p>Order your favorite items</p>
+        </header>
+
+        <div class="main-content">
+            <div class="menu-section">
+                <div id="menu" class="menu-grid"></div>
+            </div>
+            <div class="order-section">
+                <h3>Your Order</h3>
+                <ul id="order-list" class="order-list"></ul>
+                <div class="total-section">Total: ₹<span id="total">0</span></div>
+
+                <div class="payment-options">
+                    <button id="pay-cash" class="btn btn-primary" onclick="choosePayment('cash')" disabled>Pay Cash</button>
+                    <button id="pay-upi" class="btn btn-primary" onclick="choosePayment('upi')" disabled>Pay UPI</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="qr-section" id="qr-section">
+            <h3>Scan to Pay via UPI</h3>
+            <img id="qr-code" class="qr-code" src="">
+            <div id="after-upi" style="display:none;">
+                <button class="btn btn-secondary" onclick="confirmUPIPayment()">Confirm Payment</button>
+            </div>
+            <p id="order-number"></p>
+        </div>
+
+        <!-- Order Popup -->
+        <div class="popup-overlay" id="popup-overlay">
+            <div class="popup-box">
+                <div class="popup-header">
+                    <h3>Order Confirmed!</h3>
+                    <span class="close-btn" onclick="closePopup()">×</span>
+                </div>
+                <p>Your order number: <span id="order-number-popup"></span></p>
+                <button class="btn btn-primary" onclick="closePopup()">Close</button>
+            </div>
+        </div>
+
+        <!-- Toast -->
+        <div id="toast" class="toast"></div>
+
+        <!-- Order History -->
+        <div class="container order-history">
+            <h2>Order History</h2>
+            <div id="order-history-content">
+                <p>No past orders.</p>
+            </div>
+            <button class="btn btn-secondary" onclick="clearOrderHistory()">Clear History</button>
+        </div>
+    </div>
+
+    <audio id="button-sound" src="sounds/button.mp3"></audio>
+    <audio id="order-sound" src="sounds/order.mp3"></audio>
+    <audio id="reset-sound" src="sounds/reset.mp3"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
