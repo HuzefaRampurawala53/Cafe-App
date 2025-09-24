@@ -1,1 +1,27 @@
-[]
+[
+    {
+        "order_number": 1,
+        "items": {
+            "Pizza": 1,
+            "Pasta": 1,
+            "Tea": 1,
+            "Salad": 1
+        },
+        "total": 225,
+        "payment_method": "UPI",
+        "status": "Paid \u2714\ufe0f",
+        "timestamp": "2025-09-25 00:25:56"
+    },
+    {
+        "order_number": 2,
+        "items": {
+            "Salad": 1,
+            "Pasta": 1,
+            "Burger": 1
+        },
+        "total": 165,
+        "payment_method": "UPI",
+        "status": "Paid \u2714\ufe0f",
+        "timestamp": "2025-09-25 00:26:24"
+    }
+]

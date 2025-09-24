@@ -87,6 +87,7 @@ async function choosePayment(method) {
         if (method === 'cash') {
             showPopup();
             confirmCashPayment();
+            showOrderHistory();
         } else if (method === 'upi') {
             const qrRes = await fetch('/api/generate_qr', {
                 method: 'POST',
@@ -100,12 +101,14 @@ async function choosePayment(method) {
             afterUpi.style.display = 'block';
         }
 
-        showOrderHistory();
-
     } catch(err){ console.error(err); showToast('Payment failed'); }
 }
 
-function confirmUPIPayment() { resetOrder(); showToast('UPI Payment Confirmed'); }
+async function confirmUPIPayment() {
+    await showOrderHistory();
+    resetOrder();
+    showToast('UPI Payment Confirmed');
+}
 function confirmCashPayment() { resetOrder(); showToast('Cash Payment Confirmed'); }
 
 function resetOrder() {
