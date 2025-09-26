@@ -2,12 +2,34 @@
 // MENU DATA (UPDATED WITH YOUR IMAGE FILE NAMES)
 // ============================
 const menuItems = [
-    { id: 1, name: "Coffee", price: 150, image: "coffee.png" },
-    { id: 2, name: "Tea", price: 100, image: "tea.png" },
-    { id: 3, name: "Burger", price: 200, image: "burger.png" },
-    { id: 4, name: "Pizza Slice", price: 120, image: "pizza.png" },
-    { id: 5, name: "Salad", price: 180, image: "salad.png" },
-    { id: 6, name: "Soda", price: 50, image: "soda.png" }
+    { id: 1, name: "Coffee", price: 150, image: "coffee.png", subItems: [
+        { name: "Hot Coffee", price: 150 },
+        { name: "Cold Coffee - Latte", price: 160 },
+        { name: "Cold Coffee - Cappuccino", price: 170 },
+        { name: "Cold Coffee - Mocha", price: 175 }
+    ] },
+    { id: 2, name: "Tea", price: 10, image: "tea.png" },
+    { id: 3, name: "Burger", price: 200, image: "burger.png", subItems: [
+        { name: "Classic Burger", price: 200 },
+        { name: "Mexican Burger", price: 220 },
+        { name: "Cheese Burger", price: 210 }
+    ] },
+    { id: 4, name: "Pizza Slice", price: 120, image: "pizza.png", subItems: [
+        { name: "Margherita Pizza", price: 120 },
+        { name: "Pepperoni Pizza", price: 140 },
+        { name: "Veggie Pizza", price: 130 }
+    ] },
+    { id: 5, name: "Salad", price: 180, image: "salad.png", subItems: [
+        { name: "Chicken Salad", price: 180 },
+        { name: "Veg Salad", price: 170 }
+    ] },
+    { id: 6, name: "Soda", price: 50, image: "soda.png", subItems: [
+        { name: "Coca Cola", price: 50 },
+        { name: "Thumbs Up", price: 50 },
+        { name: "Sprite", price: 50 },
+        { name: "Campa Cola", price: 50 },
+        { name: "Pepsi", price: 50 }
+    ] }
 ];
 
 // ============================
@@ -67,23 +89,26 @@ function showPopup(orderNum) {
 // ORDER LOGIC
 // ============================
 
-function addToOrder(itemId) {
+function addToOrder(itemId, subName, subPrice) {
     playButtonSound();
 
     const item = menuItems.find(i => i.id === itemId);
     if (!item) return;
 
-    const existingItem = currentOrder.find(i => i.id === itemId);
+    const name = subName || item.name;
+    const price = subPrice || item.price;
+
+    const existingItem = currentOrder.find(i => i.id === itemId && i.name === name);
 
     if (existingItem) {
         existingItem.quantity++;
     } else {
         // Deep copy the item to ensure quantity is tracked locally
-        currentOrder.push({ ...item, quantity: 1 });
+        currentOrder.push({ id: itemId, name, price, image: item.image, quantity: 1 });
     }
 
     updateOrderUI();
-    showToast(`${item.name} added!`);
+    showToast(`${name} added!`);
 }
 
 function updateOrderUI() {
@@ -164,7 +189,7 @@ function choosePayment(method) {
         items: JSON.parse(JSON.stringify(currentOrder)), 
         total: total,
         paymentMethod: method,
-        timestamp: new Date().toLocaleTimeString()
+        timestamp: new Date().toLocaleString()
     };
 
     if (method === 'cash') {
@@ -260,6 +285,7 @@ async function showOrderHistory() {
                 <thead>
                     <tr>
                         <th>Order #</th>
+                        <th>Date</th>
                         <th>Time</th>
                         <th>Items</th>
                         <th>Total</th>
@@ -271,10 +297,18 @@ async function showOrderHistory() {
 
         orders.forEach(order => {
             const itemsList = order.items.map(i => `${i.name} (${i.quantity})`).join(', ');
+            const parts = order.timestamp.split(', ');
+            let datePart = '';
+            let timePart = order.timestamp;
+            if (parts.length === 2) {
+                datePart = parts[0];
+                timePart = parts[1];
+            }
             tableHTML += `
                 <tr>
                     <td>#${order.orderNumber || order.order_number}</td>
-                    <td>${order.timestamp.split(' ')[1] || order.timestamp}</td>
+                    <td>${datePart}</td>
+                    <td>${timePart}</td>
                     <td>${itemsList}</td>
                     <td>₹${order.total.toFixed(2)}</td>
                     <td>${order.paymentMethod.toUpperCase()}</td>
@@ -303,6 +337,59 @@ async function clearOrderHistory() {
 }
 
 // ============================
+// SUB-MENU LOGIC
+// ============================
+function showSubMenu(itemId) {
+    const item = menuItems.find(i => i.id === itemId);
+    if (!item || !item.subItems) return;
+
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'sub-menu-overlay';
+    overlay.onclick = (e) => {
+        if (e.target === overlay) closeSubMenu();
+    };
+
+    // Create sub-menu box
+    const subMenuBox = document.createElement('div');
+    subMenuBox.className = 'sub-menu-box';
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'sub-menu-header';
+    header.innerHTML = `<h3>Choose ${item.name} Variant</h3><span class="close-btn" onclick="closeSubMenu()">×</span>`;
+    subMenuBox.appendChild(header);
+
+    // Options
+    const optionsDiv = document.createElement('div');
+    optionsDiv.className = 'sub-menu-options';
+    item.subItems.forEach(subItem => {
+        const option = document.createElement('div');
+        option.className = 'sub-menu-option';
+        option.innerHTML = `
+            <h4>${subItem.name}</h4>
+            <p class="price">₹${subItem.price.toFixed(2)}</p>
+        `;
+        option.onclick = () => {
+            addToOrder(itemId, subItem.name, subItem.price);
+            closeSubMenu();
+        };
+        optionsDiv.appendChild(option);
+    });
+    subMenuBox.appendChild(optionsDiv);
+
+    overlay.appendChild(subMenuBox);
+    document.body.appendChild(overlay);
+}
+
+function closeSubMenu() {
+    const overlay = document.querySelector('.sub-menu-overlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+// ============================
 // INIT FUNCTION (TO BUILD THE MENU)
 // ============================
 function initMenu() {
@@ -310,10 +397,14 @@ function initMenu() {
     menuItems.forEach(item => {
         const div = document.createElement('div');
         div.className = 'dish';
-        div.setAttribute('onclick', `addToOrder(${item.id})`); 
+        if (item.subItems) {
+            div.setAttribute('onclick', `showSubMenu(${item.id})`);
+        } else {
+            div.setAttribute('onclick', `addToOrder(${item.id})`);
+        }
         div.innerHTML = `
             <img src="/food-photos/${item.image}" alt="${item.name}">
-            
+
             <div class="dish-info">
                 <h4>${item.name}</h4>
                 <p class="price">₹${item.price.toFixed(2)}</p>
