@@ -18,6 +18,7 @@ function gatherOrder() {
         });
     });
 
+<<<<<<< HEAD
     const total = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
     return {
@@ -34,6 +35,34 @@ function gatherOrder() {
 function pay(paymentMethod) {
     selectedPaymentMethod = paymentMethod;
     pendingOrder = gatherOrder();
+=======
+        if (method === 'cash') {
+            showPopup();
+            confirmCashPayment();
+            showOrderHistory();
+        } else if (method === 'upi') {
+            const qrRes = await fetch('/api/generate_qr', {
+                method: 'POST',
+                headers: {'Content-Type':'application/json'},
+                body: JSON.stringify({ total: total, order_number: currentOrderNumber })
+            });
+            const qrData = await qrRes.json();
+            qrCodeImg.src = 'data:image/png;base64,' + qrData.qr_image;
+            orderNumberDisplay.textContent = `#${qrData.order_number}`;
+            qrSection.style.display = 'block';
+            afterUpi.style.display = 'block';
+        }
+
+    } catch(err){ console.error(err); showToast('Payment failed'); }
+}
+
+async function confirmUPIPayment() {
+    await showOrderHistory();
+    resetOrder();
+    showToast('UPI Payment Confirmed');
+}
+function confirmCashPayment() { resetOrder(); showToast('Cash Payment Confirmed'); }
+>>>>>>> c50f991cda12c3ea15b66e2d873d9b2fcc10de7d
 
     if (!pendingOrder.items.length) {
         alert("Please select items first!");
