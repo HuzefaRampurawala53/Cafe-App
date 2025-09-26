@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Huzefa's Cafe POS</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="container">
@@ -15,21 +16,15 @@
 
         <div class="main-content">
             <div class="menu-section">
-                <div id="menu" class="menu-grid">
-                    <div class="menu-item">
-                        <img src="/food-photos/your-image.jpg" alt="Food Name">
-                        <h4>Food Item Name</h4>
-                        <p>Delicious description of the food item.</p>
-                        <span class="price">₹100</span>
-                        <button class="btn btn-secondary" onclick="addToOrder('Food Item Name', 100)">Add to Order</button>
-                    </div>
-                    <!-- Repeat similar blocks for other menu items -->
-                </div>
+                <h2>Menu</h2>
+                <div id="menu" class="menu-grid"></div>
             </div>
+
             <div class="order-section">
                 <h3>Your Order</h3>
                 <ul id="order-list" class="order-list"></ul>
-                <div class="total-section">Total: ₹<span id="total">0</span></div>
+                
+                <div class="total-section">Total: ₹<span id="total">0.00</span></div>
 
                 <div class="payment-options">
                     <button id="pay-cash" class="btn btn-primary" onclick="choosePayment('cash')" disabled>Pay Cash</button>
@@ -40,30 +35,28 @@
 
         <div class="qr-section" id="qr-section">
             <h3>Scan to Pay via UPI</h3>
-            <img id="qr-code" class="qr-code" src="">
+            <p id="order-number"></p>
+            <div id="qr-container">
+                <img id="qr-code" class="qr-code" src="">
+            </div>
+            
             <div id="after-upi" style="display:none;">
                 <button class="btn btn-secondary" onclick="confirmUPIPayment()">Confirm Payment</button>
             </div>
-            <p id="order-number"></p>
         </div>
 
-        <!-- Order Popup -->
         <div class="popup-overlay" id="popup-overlay">
-            <div class="popup-box">
+            <div class="popup-box" id="popup-box">
                 <div class="popup-header">
                     <h3>Order Confirmed!</h3>
-                    <span class="close-btn" onclick="closePopup()"></span>
+                    <span class="close-btn" onclick="closePopup()">×</span>
                 </div>
                 <p>Your order number: <span id="order-number-popup"></span></p>
                 <button class="btn btn-primary" onclick="closePopup()">Close</button>
             </div>
         </div>
 
-        <!-- Toast -->
-        <div id="toast" class="toast"></div>
-
-        <!-- Order History -->
-        <div class="container order-history">
+        <div class="order-history">
             <h2>Order History</h2>
             <div id="order-history-content">
                 <p>No past orders.</p>
