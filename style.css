@@ -71,12 +71,6 @@ h2 {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0,0,0,0.1);
 }
-.dish img:hover {
-    -webkit-box-reflect: below 0px linear-gradient(to bottom, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
-}
-.dish img:hover {
-    -webkit-box-reflect: below 0px linear-gradient(to bottom, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
-}
 .dish img { 
     width: 100%; 
     height: 100px; 
@@ -168,6 +162,17 @@ h2 {
 }
 .btn-secondary:hover:not(:disabled) { 
     background-color: #e2e6ea; 
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+    border: 1px solid #dc3545;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background-color: #c82333;
+    border-color: #bd2130;
 }
 .btn:active:not(:disabled) { 
     transform: scale(0.98); 
@@ -305,7 +310,7 @@ h2 {
 }
 
 .sub-menu-box {
-    background: #fff url('/food-photos/saladbg.webp') center/cover no-repeat;
+    background: #fff;
     border-radius: 12px;
     padding: 20px;
     max-width: 400px;
@@ -374,6 +379,87 @@ h2 {
     margin: 0;
     color: #007bff;
     font-weight: bold;
+}
+
+/* Backgrounds for each food */
+.sub-menu-box.burger { 
+    background: #fff url('/food-photos/burgerbg.jpg') center/cover no-repeat; 
+}
+.sub-menu-box.pizza { 
+    background: #fff url('/food-photos/pizzabg.jpg') center/cover no-repeat; 
+}
+.sub-menu-box.coffee { 
+    background: #fff url('/food-photos/coffeebg.jpg') center/cover no-repeat; 
+}
+.sub-menu-box.pasta { 
+    background: #fff url('/food-photos/pastabg.jpg') center/cover no-repeat; 
+}
+.sub-menu-box.salad { 
+    background: #fff url('/food-photos/saladbg.webp') center/cover no-repeat; 
+}
+.sub-menu-box.soda { 
+    background: #fff url('/food-photos/sodabg.jpg') center/cover no-repeat; 
+}
+
+/* ==================== */
+/* Services Section */
+/* ==================== */
+.services-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.services-section h2 {
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    margin-top: 0;
+}
+.services-section p {
+    margin-bottom: 20px;
+    color: #666;
+}
+.services-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow: hidden;
+    gap: 20px;
+    animation: slideLeft 20s linear infinite;
+}
+.service {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex: 0 0 150px;
+}
+.service:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+.service img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    display: block;
+}
+.service-info {
+    padding: 10px;
+}
+.service-info h4 {
+    margin: 0 0 5px;
+    font-size: 1.1em;
+}
+
+@keyframes slideLeft {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
 }
 
 /* ==================== */
