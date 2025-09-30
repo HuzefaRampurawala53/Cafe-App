@@ -344,8 +344,24 @@ function initMenu() {
     });
 }
 
+function updateDateTime() {
+    const now = new Date();
+    const options = { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit' 
+    };
+    const datetimeString = now.toLocaleDateString('en-US', options);
+    document.getElementById('datetime').textContent = datetimeString;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initServices();
     initMenu();
     loadOrderHistory();
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
 });
