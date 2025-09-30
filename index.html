@@ -1,74 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huzefa's Cafe POS</title>
-    <link rel="stylesheet" href="style.css"> 
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Huzefa's Cafe</title>
+  <link rel="stylesheet" href="style.css" />
+
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Huzefa's Cafe</h1>
-            <p>Order your favorite items</p>
-        </header>
+  <video id="background-video" autoplay muted loop>
+    <source src="food-video/food.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+  <div class="container">
+    <header>
+      <h1>☕ Huzefa's Cafe</h1>
+      <div id="datetime"></div>
+    </header>
 
-        <div class="main-content">
-            <div class="menu-section">
-                <h2>Menu</h2>
-                <div id="menu" class="menu-grid"></div>
-            </div>
-
-            <div class="order-section">
-                <h3>Your Order</h3>
-                <ul id="order-list" class="order-list"></ul>
-                
-                <div class="total-section">Total: ₹<span id="total">0.00</span></div>
-
-                <div class="payment-options">
-                    <button id="pay-cash" class="btn btn-primary" onclick="choosePayment('cash')" disabled>Pay Cash</button>
-                    <button id="pay-upi" class="btn btn-primary" onclick="choosePayment('upi')" disabled>Pay UPI</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="qr-section" id="qr-section">
-            <h3>Scan to Pay via UPI</h3>
-            <p id="order-number"></p>
-            <div id="qr-container">
-                <img id="qr-code" class="qr-code" src="">
-            </div>
-            
-            <div id="after-upi" style="display:none;">
-                <button class="btn btn-secondary" onclick="confirmUPIPayment()">Confirm Payment</button>
-            </div>
-        </div>
-
-        <div class="popup-overlay" id="popup-overlay">
-            <div class="popup-box" id="popup-box">
-                <div class="popup-header">
-                    <h3>Order Confirmed!</h3>
-                    <span class="close-btn" onclick="closePopup()">×</span>
-                </div>
-                <p>Your order number: <span id="order-number-popup"></span></p>
-                <button class="btn btn-primary" onclick="closePopup()">Close</button>
-            </div>
-        </div>
-
-        <div class="order-history">
-            <h2>Order History</h2>
-            <div id="order-history-content">
-                <p>No past orders.</p>
-            </div>
-            <button class="btn btn-secondary" onclick="clearOrderHistory()">Clear History</button>
-        </div>
+    <div class="services-section">
+      <h2>A world of services, at your cafe</h2>
+      <p>Have Fun!!/p>
+      <div id="services-grid" class="services-grid"></div>
     </div>
 
+    <div class="main-content">
+      <div class="menu-section">
+        <h2>Menu</h2>
+        <div id="menu" class="menu-grid"></div>
+      </div>
+
+      <div class="order-section">
+        <h3>Your Order</h3>
+        <ul id="order-list" class="order-list"></ul>
+        
+        <div class="total-section">Total: ₹<span id="total">0.00</span></div>
+
+        <div class="payment-options">
+          <button id="pay-cash" class="btn btn-primary" onclick="choosePayment('cash')" disabled>Pay Cash</button>
+          <button id="pay-upi" class="btn btn-primary" onclick="choosePayment('upi')" disabled>Pay UPI</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-history">
+      <h2>Order History</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Date/Time</th>
+            <th>Order ID</th>
+            <th>Payment Method</th>
+            <th>Status</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="order-history-body"></tbody>
+      </table>
+      <button id="clear-history" class="btn btn-danger" onclick="clearHistory()">Clear All History</button>
+    </div>
+
+    <!-- UPI Modal -->
+    <div class="popup-overlay" id="upi-modal-overlay">
+      <div class="popup-box" id="upi-modal-box">
+        <div class="popup-header">
+          <h3>Scan QR to Pay with UPI</h3>
+          <span class="close-btn" onclick="closeUPIModal()">×</span>
+        </div>
+        <div class="upi-content">
+          <div id="qrcode" class="qr-code"></div>
+          <p id="upi-amount">Amount: ₹<span id="upi-total">0.00</span></p>
+          <p>Scan the QR code with your UPI app to complete payment (amount pre-filled).</p>
+          <button id="paid-btn" class="btn btn-success" onclick="confirmPaid()">Paid</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup-overlay" id="popup-overlay">
+      <div class="popup-box" id="popup-box">
+        <div class="popup-header">
+          <h3>Order Confirmed!</h3>
+          <span class="close-btn" onclick="closePopup()">×</span>
+        </div>
+        <p>Your order number: <span id="order-number-popup"></span></p>
+        <button class="btn btn-primary" onclick="closePopup()">Close</button>
+      </div>
+    </div>
+
+    <!-- Clear History Confirmation Popup -->
+    <div class="popup-overlay" id="confirm-clear-overlay">
+      <div class="popup-box" id="confirm-clear-box">
+        <div class="popup-header">
+          <h3>Confirm Clear History</h3>
+          <span class="close-btn" onclick="closeConfirmClear()">×</span>
+        </div>
+        <p>Are you sure you want to clear all order history? This action cannot be undone.</p>
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <button class="btn btn-secondary" onclick="closeConfirmClear()">Cancel</button>
+          <button class="btn btn-danger" onclick="confirmClear()">Clear All</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Sounds -->
     <audio id="button-sound" src="sounds/button.mp3"></audio>
     <audio id="order-sound" src="sounds/order.mp3"></audio>
     <audio id="reset-sound" src="sounds/reset.mp3"></audio>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -117,13 +117,18 @@ def serve_sounds(filename):
     """Serves files from the 'sounds' subdirectory."""
     return send_from_directory('sounds', filename)
 
+@app.route('/food-video/<path:filename>')
+def serve_food_video(filename):
+    """Serves files from the 'food-video' subdirectory."""
+    return send_from_directory('food-video', filename)
+
 # =======================================================
 # RUNNER
 # =======================================================
 
 if __name__ == "__main__":
     # Ensure necessary folders exist
-    for folder in ['food-photos', 'sounds']:
+    for folder in ['food-photos', 'sounds', 'food-video']:
         if not os.path.exists(folder):
             os.makedirs(folder)
             
