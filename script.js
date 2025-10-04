@@ -180,22 +180,30 @@ function choosePayment(method) {
     } else if (method === 'upi') {
         document.getElementById('upi-total').textContent = pendingOrder.total.toFixed(2);
         const upiData = `upi://pay?pa=rampurawalahuzefa6@okhdfcbank&am=${pendingOrder.total}&tn=Huzefa's Cafe Order&cu=INR`;
-        if (typeof QRCode !== 'undefined') {
-            QRCode.toCanvas(document.getElementById('qrcode'), upiData, { width: 200, margin: 1, color: { dark: '#000000', light: '#FFFFFF' } }, function (error) {
-                if (error) {
-                    console.error('QR Code generation error:', error);
-                    document.getElementById('qrcode').innerHTML = '<p>QR Code generation failed. Please try again.</p>';
-                }
-            });
-        } else {
-            console.error('QRCode library not loaded');
-            document.getElementById('qrcode').innerHTML = '<p>QR Code library not available. Please refresh the page.</p>';
+        
+        // This is the new, updated code to use jQuery-qrcode
+        try {
+            // Check if jQuery is loaded and a jQuery-qrcode function exists
+            if (window.jQuery && typeof window.jQuery.fn.qrcode === 'function') {
+                $('#qrcode').empty().qrcode({
+                    'size': 200,
+                    'ecLevel': 'H',
+                    'fill': '#000',
+                    'text': upiData
+                });
+            } else {
+                console.error('jQuery-qrcode library not loaded.');
+                document.getElementById('qrcode').innerHTML = '<p>QR Code library not available. Please refresh the page.</p>';
+            }
+        } catch (error) {
+            console.error('QR Code generation error:', error);
+            document.getElementById('qrcode').innerHTML = '<p>QR Code generation failed. Please try again.</p>';
         }
+
         document.getElementById('upi-modal-overlay').style.display = 'flex';
         setTimeout(() => document.getElementById('upi-modal-box').classList.add('show'), 10);
     }
 }
-
 function closeUPIModal() {
     document.getElementById('upi-modal-overlay').style.display = 'none';
     document.getElementById('upi-modal-box').classList.remove('show');
